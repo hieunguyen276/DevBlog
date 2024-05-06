@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet');
+@import "./assets/scss/variables";
+
+*{
+    font-family: "Montserrat", sans-serif;
+}
+/* Input */
+.main-input{
+    &:focus, &:hover, &:focus-within{
+        @apply bg-gray-95 border-transparent outline-none shadow-none #{!important}
+    }
+    &.ant-input{
+        &:focus, &:hover, &:focus-within{
+            @apply border-transparent bg-gray-95 outline-none shadow-none #{!important}
+        }
+    }
+    .ant-input{
+      @apply bg-transparent text-black-20 #{!important}
+    }
+    @apply bg-gray-120 border-gray-120 text-black-20 py-2.5 px-5 rounded-[0.425rem] text-sm outline-none font-medium h-[44px]
+}
+
+.error-input {
+  @apply border-red-65 #{!important}
+}
+
+.input-wrap {
+  @apply w-full mb-[15px];
+  .label-wrap {
+    @apply text-[14px] font-medium mb-[5px];
+    .required {
+      @apply text-red-65 font-bold;
+    }
+  }
+  .error {
+    @apply
+    flex items-center
+    text-red-65 text-left text-sm
+    mt-[3px];
+    .icon {
+      @apply
+      w-3.5 mt-[-1px] mr-[3px]
+    }
+  }
+}
+
+/* Select */
+.main-select{
+  @apply min-h-[44px] text-[13px];
+  .ant-select-selector{
+    &:focus, &:hover, &:focus-within{
+      @apply border-transparent outline-none outline-none shadow-none #{!important}
+    }
+    .ant-select-selection-search{
+      @apply m-0;
+      inset-inline-start: 20px;
+    }
+    @apply bg-gray-120 border-transparent text-black-20 py-1.5 px-5 rounded-[0.425rem] text-[13px] font-medium outline-none font-medium #{!important}
+  }
+}
+.ant-select-multiple {
+  .ant-select-selection-placeholder {
+    @apply pl-[10px]
+  }
+  .ant-select-selection-search {
+    inset-inline-start: 0!important;
+  }
+}
+
+/* Checkbox */
+.main-checkbox{
+    .ant-checkbox{
+        &:not(.ant-checkbox-checked){
+            .ant-checkbox-inner {
+                @apply bg-gray-95 border-transparent text-black-20 outline-none #{!important}
+            }
+        }
+        .ant-checkbox-inner{
+            &:after{
+                @apply top-[47%] left-[25.5%]
+            }
+            @apply w-5 h-5
+        }
+    }
+}
+
+/* Switch */
+.main-switch{
+    &:not(.ant-switch-checked){
+        @apply bg-gray-95 #{!important}
+    }
+}
+
+/* Date Picker */
+.main-datepicker{
+    &:focus, &:hover, &:focus-within{
+        @apply bg-gray-95 border-transparent outline-none outline-none shadow-none #{!important}
+    }
+    .ant-select-selection-search{
+        @apply m-0
+    }
+    .ant-select-selection-placeholder{
+        @apply ml-2
+    }
+    @apply bg-gray-120 border-gray-120 text-black-20 py-[9px] px-5 rounded-[0.425rem] text-sm outline-none font-medium #{!important}
+}
+
+/* Input Number */
+.main-input-number{
+    &:focus, &:hover, &:focus-within{
+        @apply bg-gray-95 outline-none
+    }
+    &:focus{
+        @apply bg-gray-95
+    }
+    &.ant-input-number{
+        &:focus, &:hover, &:focus-within{
+            @apply border-transparent bg-gray-95 outline-none shadow-none
+        }
+    }
+    @apply bg-gray-95 border-gray-95 text-black-20 py-[5px] px-5 rounded-[0.425rem] text-sm outline-none font-medium
+}
+
+/* Table */
+.main-table{
+    .ant-table-thead{
+        .ant-table-cell{
+            &:before{
+                @apply bg-transparent #{!important}
+            }
+            @apply bg-white text-gray-65 #{!important}
+        }
+    }
+    .ant-table-cell{
+        @apply border-b border-dashed #{!important}
+    }
+    .ant-table-cell-row-hover, .ant-table-column-sort{
+      @apply bg-transparent #{!important}
+    }
+}
+
+.fixed-cell {
+    .ant-table-thead{
+        .ant-table-cell{
+            &:before{
+                @apply bg-white #{!important}
+            }
+            @apply bg-white text-gray-65 #{!important}
+        }
+    }
+
+    .ant-table-cell-row-hover, .ant-table-column-sort{
+        @apply bg-white #{!important}
+    }
+}
+
+/* Pagination */
+.ant-pagination-item-active{
+    a{
+        @apply text-white #{!important}
+    }
+    @apply bg-blue-60 #{!important}
+}
+
+/* Button */
+.main-btn-primary{
+    &.ant-btn-primary{
+        &:hover{
+            @apply bg-blue-55 #{!important}
+        }
+        @apply bg-blue-60 text-white #{!important}
+    }
+}
+
+.ant-btn-primary{
+  &:hover{
+    @apply bg-blue-55 #{!important}
+  }
+  @apply bg-blue-60 text-white #{!important}
+}
+
+.main-btn-close{
+  @apply bg-gray-120 border-transparent mr-2.5 #{!important};
+  &:hover{
+    @apply text-black-10 bg-gray-115 #{!important};
+  }
+}
+
+.ant-btn-lg {
+  @apply h-[44px] text-sm #{!important};
+}
+
+.main-btn-close{
+  @apply bg-gray-120 border-transparent mr-2.5 #{!important};
+  &:hover{
+    @apply text-black-10 bg-gray-115 #{!important};
+  }
+}
+
+/* Notification */
+.ant-notification {
+  z-index: 9999;
+  .ant-notification-notice-wrapper {
+    @apply w-max
+  }
+  .ant-notification-notice {
+
+    .ant-notification-notice-icon {
+      @apply hidden
+    }
+
+    .ant-notification-notice-message {
+      @apply hidden
+    }
+
+    .ant-notification-notice-description {
+
+      .notification-content {
+
+        .icon-notification {
+          img {
+            @apply max-w-none w-auto h-auto
+          }
+
+         @apply mr-[15px] w-4 h-4
+        }
+
+        .text-notification {
+          @apply text-sm text-black-20
+        }
+
+        @apply flex justify-start items-center min-h-[40px] rounded-md py-2 pr-[42px] pl-4 w-max
+      }
+
+      .notification-success {
+        @apply border border-green-75 bg-green-95
+      }
+
+      .notification-error {
+        @apply border border-red-75 bg-red-95
+      }
+
+      .notification-warning {
+        @apply border border-orange-75 bg-orange-95
+      }
+
+      @apply m-0 ms-0 #{!important}
+    }
+
+    .ant-notification-notice-close {
+
+      &:hover {
+        @apply bg-black-110
+      }
+
+      .ant-notification-notice-close-x {
+        @apply flex
+      }
+
+      @apply top-0 right-[10px] h-full flex items-center
+    }
+
+    @apply p-0 rounded-md w-full overflow-hidden #{!important}
+  }
+}
+
+/* Skeleton */
+.ant-skeleton-input-lg {
+  height: 44px!important;
+}
+
+/* Scroll bar */
+html *::-webkit-scrollbar {
+  @apply h-1.5;
+  @apply w-1.5;
+}
+
+html *::-webkit-scrollbar-track {
+  @apply bg-[#d9dbe2];
+  @apply rounded-lg;
+}
+
+html *::-webkit-scrollbar-thumb {
+  @apply bg-[#bec3cd];
+  @apply rounded-lg;
+}

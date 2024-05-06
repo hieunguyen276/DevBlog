@@ -1,0 +1,67 @@
+@import 'src/assets/scss/variables';
+
+.mainModalWrap {
+  width: 100%;
+
+  .inputWrapper {
+    width: 100%;
+    margin-bottom: 18px;
+
+    .label {
+      display: block;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      color: $colorBlack;
+      margin-bottom: 4px;
+    }
+
+    .error {
+      display: block;
+      color: $colorError;
+      font-weight: 500;
+    }
+
+    .select {
+      width: 200px;
+    }
+    /* Định dạng phần select */
+    .ant-select-selector {
+      width: 100%;
+    //   /* Đặt chiều rộng cho phần select, sử dụng toàn bộ không gian */
+    //   height: 40px;
+    //   /* Đặt chiều cao cho phần select */
+    //   padding: 8px 12px;
+    //   /* Đặt padding cho phần select */
+    //   font-size: 14px;
+    //   /* Đặt kích thước chữ cho phần select */
+    //   border: 1px solid #d9d9d9;
+    //   /* Đặt viền cho phần select */
+    //   border-radius: 4px;
+    //   /* Đặt bo tròn cho phần select */
+    //   box-sizing: border-box;
+    //   /* Đảm bảo padding và border không làm thay đổi kích thước của phần tử */
+    }
+
+    // /* Định dạng các mục trong dropdown */
+    .ant-select-item {
+      width: 100%;
+    //   padding: 8px 12px;
+    //   /* Đặt padding cho mỗi mục */
+    //   font-size: 14px;
+    //   /* Đặt kích thước chữ cho mỗi mục */
+    }
+
+    // /* Định dạng mục được chọn trong dropdown */
+    // .ant-select-item-option-selected {
+    //   background-color: #e6f7ff;
+    //   /* Đặt màu nền cho mục được chọn */
+    // }
+
+    // /* Định dạng icon mũi tên xuống */
+    // .ant-select-arrow-icon {
+    //   color: #888;
+    //   /* Đặt màu của icon mũi tên xuống */
+    // }
+  }
+}
