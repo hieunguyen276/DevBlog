@@ -14,6 +14,7 @@ import {
 } from "../../../../states/modules/category";
 import {handleCreateCategory, handleUpdateCategory} from "../../../../api/category";
 
+
 CreateOrUpdate.prototype = {
   isModalOpen: PropTypes.bool.isRequired,
   configModal: PropTypes.object.isRequired,
@@ -49,6 +50,7 @@ function CreateOrUpdate (props) {
     dispatch(setErrorCreateOrUpdateCategory({
       name: '',
       description: '',
+      // blogs: [],
     }));
   }, [dataCreateOrUpdate, dispatch])
 
@@ -63,6 +65,7 @@ function CreateOrUpdate (props) {
     setDataCreateOrUpdate({
       name: '',
       description: '',
+      // blogs: [],
     })
   }
 

@@ -2,15 +2,6 @@ import React from 'react';
 import styles from './styles.module.scss';
 import './styles.scss';
 import {Pagination, Table} from 'antd';
-import PropTypes from "prop-types";
-
-TableMASQ.prototype = {
-  columns: PropTypes.array.isRequired,
-  dataSource: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired,
-  rowKey: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
-}
 
 TableMASQ.defaultProps = {
   columns: [],
@@ -36,13 +27,13 @@ function TableMASQ(props) {
       />
 
       <div className={styles.paginationWrap}>
-        <span className={styles.textPagination}>
-          <span>Showing {(pagination.perPage * (pagination.currentPage - 1)) + 1} to</span>
+        {/* <span className={styles.textPagination}>
+          <span>Hiển thị {(pagination.perPage * (pagination.currentPage - 1)) + 1} to</span>
           <span> {pagination.totalRecord > (pagination.perPage * pagination.currentPage) ?
             pagination.perPage * pagination.currentPage : pagination.totalRecord }
           </span>
           <span> of {pagination.totalRecord} entries</span>
-        </span>
+        </span> */}
 
         <Pagination
           current={pagination.currentPage}

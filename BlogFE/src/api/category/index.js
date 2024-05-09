@@ -6,7 +6,7 @@ import {
   updateCategory, updateCategorySuccess, updateCategoryFail,
   deleteCategory, deleteCategorySuccess, deleteCategoryFail,
 } from "../../states/modules/category";
-import { getDetailCategory, getDetailCategoryFail, getDetailCategorySuccess } from "../../states/modules/categoryDetail";
+import { getDetailCategory, getDetailCategoryFail, getDetailCategorySuccess, removeBlogFail, removeBlogSuccess, startRemoveBlog } from "../../states/modules/categoryDetail";
 
 export const getListCategory = (dataFilter = {
   perPage: 10,
@@ -49,7 +49,6 @@ export const getAllRoleForCategory = () => async (dispatch, getState) => {
 
 
 export const getACategory = (idCategory) => async (dispatch, getState) => {
-  console.log('clall Cate')
   return callApi({
     method: 'get',
     apiPath: `categories/${idCategory}`,
@@ -79,6 +78,17 @@ export const handleUpdateCategory = (data, idCategory) => async (dispatch, getSt
     apiPath: `categories/${idCategory}`,
     actionTypes: [updateCategory, updateCategorySuccess, updateCategoryFail],
     variables: data,
+    dispatch,
+    getState
+  })
+}
+
+export const handleUpdateCategoryBlog = (idCategory, idBlog) => async (dispatch, getState) => {
+  return callApi({
+    method: 'put',
+    apiPath: `categories/${idCategory}/${idBlog}`,
+    actionTypes: [startRemoveBlog, removeBlogSuccess, removeBlogFail],
+    variables: {},
     dispatch,
     getState
   })

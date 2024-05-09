@@ -4,7 +4,15 @@ const categoryDetailSlice = createSlice({
   name: 'categoryDetails',
   initialState: {
     categoryDetails: {},
-    isLoading: false
+    isLoading: false,
+    paginationListBlog: {
+      currentPage: 1,
+      perPage: 10,
+      totalPage: 1,
+      totalRecord: 0,
+    },
+    visibleModalRemoveBlogFromCategory: false,
+    isLoadingBtnDeleteBlog: false,
   },
   reducers: {
     getDetailCategory: (state) => ({
@@ -21,6 +29,23 @@ const categoryDetailSlice = createSlice({
       categoryDetails: {},
     }),
 
+    setVisibleModalRemoveBlogFromCategory: (state, action) => ({
+      ...state,
+      visibleModalRemoveBlogFromCategory: action.payload
+    }),
+    startRemoveBlog: (state) => ({
+      ...state,
+      isLoadingBtnDeleteBlog: true
+    }),
+    removeBlogSuccess: (state) => ({
+      ...state,
+      isLoadingBtnDeleteBlog: false
+    }),
+    removeBlogFail: (state) => ({
+      ...state,
+      isLoadingBtnDeleteBlog: false
+    }),
+
   }
 })
 
@@ -28,6 +53,7 @@ export const {
   getDetailCategory,
   getDetailCategorySuccess,
   getDetailCategoryFail,
+  startRemoveBlog, removeBlogFail, removeBlogSuccess, setVisibleModalRemoveBlogFromCategory
 } = categoryDetailSlice.actions
 
 export default categoryDetailSlice.reducer;

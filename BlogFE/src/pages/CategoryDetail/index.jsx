@@ -7,36 +7,50 @@ import TableCustom from '../../components/UI/Table'
 import IconDeleteTable from "../../assets/images/icon/table/delete_14x14.svg";
 import ModalConfirm from "../../components/UI/Modal/ModalConfirm";
 import { useDispatch, useSelector } from "react-redux";
-import { getACategory,handleDeleteCategory } from "../../api/category";
-import { setVisibleModalCreateOrUpdateCategory, setVisibleModalDeleteCategory } from "../../states/modules/category";
+import { getACategory, handleDeleteCategory, handleUpdateCategoryBlog } from "../../api/category";
+import GroupContext from "antd/es/checkbox/GroupContext";
+import { setVisibleModalDeleteBlog } from "../../states/modules/blog";
+import { handleDeleteBlog } from "../../api/blog";
+import { getDetailCategory, setVisibleModalRemoveBlogFromCategory } from "../../states/modules/categoryDetail";
+import { getNotification } from "../../utils/helper";
 
 
 function CategoryDetail() {
 
   const param = useParams();
 
-  const authCategory = useSelector(state => state.category.authCategory);
   const categoryDetails = useSelector(state => state.categoryDetails.categoryDetails);
-  console.log('data chi tiet', categoryDetails)
+  const allBlogs = categoryDetails.blogs
+
+  // console.log('aaaaaa', allBlogs)
+
 
   const navigate = useNavigate();
   const columns = [
     {
-      title: 'Name phong',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => <div className={styles.nameWrap}>
-        <span>{record.name}</span>
-      </div>,
-      defaultSortOrder: '',
+      title: 'Thumbnail',
+      dataIndex: 'thumbnail',
+      key: 'thumbnail',
+      render: (text, record) =>
+        <div className={styles.imgWrap}>
+          <img src={record.thumbnail} alt="" />
+        </div>,
       sorter: true,
+      width: 200,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      render: (text, record) => <span>{record.description}</span>,
-      defaultSortOrder: '',
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      render: (text, record) => <span className={styles.customTitle}>{record.title}</span>,
+      sorter: true,
+      width: 500,
+    },
+    {
+      title: 'Content',
+      dataIndex: 'content',
+      key: 'content',
+      render: (text, record) => <span className={styles.customContent}>{record.content}</span>,
       sorter: true,
     },
     {
@@ -46,26 +60,20 @@ function CategoryDetail() {
       align: 'center',
       width: '80px',
       render: (text, record) => (
-        <>
-          {
-            <div className={styles.btnAction}>
-              {
-                <div onClick={() => handleShowConfirmDelete(record)} className={styles.btnWrap}>
-                  <img src={IconDeleteTable} alt="" />
-                </div>
-              }
-            </div>
-          }
-        </>
-
+        <div className={styles.btnAction}>
+          <div onClick={() => handleShowConfirmDelete(record)} className={styles.btnWrap}>
+            <img src={IconDeleteTable} alt="Delete" />
+          </div>
+        </div>
       ),
     },
   ];
-  const categorys = useSelector(state => state.category.categorys);
-  const isLoadingTableCategory = useSelector(state => state.category.isLoadingTableCategory);
-  const paginationListCategory = useSelector(state => state.category.paginationListCategory);
-  const visibleModalDeleteCategory = useSelector(state => state.category.visibleModalDeleteCategory);
+  const isLoadingDetailCategory = useSelector(state => state.categoryDetails.isLoadingDetailCategory);
+  const paginationListBlog = useSelector(state => state.blog.paginationListBlog);
+  const blogs = useSelector(state => state.blog.blogs);
+  const visibleModalRemoveBlogFromCategory = useSelector(state => state.categoryDetails.visibleModalRemoveBlogFromCategory);
   const [category, setCategory] = useState({});
+  const [blog, setBlog] = useState({});
   const [configModal, setConfigModal] = useState({
     title: 'Create Category',
     type: 'CREATE',
@@ -81,47 +89,27 @@ function CategoryDetail() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (param.categoryId) {
-      console.log('sdjhsdjhsjdhs')
-      dispatch(getACategory(param.categoryId))
+    if (param.id) {
+      dispatch(getACategory(param.id))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleCreate = () => {
-    dispatch(setVisibleModalCreateOrUpdateCategory(true))
-    setConfigModal({
-      title: "Create Category",
-      type: "CREATE"
-    })
+  const handleShowConfirmDelete = (blog) => {
+    let blogSelect = _.cloneDeep(blog)
+    setBlog(blogSelect)
+    dispatch(setVisibleModalRemoveBlogFromCategory(true))
   }
 
-  const handleEdit = (category) => {
-    let categorySelect = _.cloneDeep(category)
-    setCategory(categorySelect)
-    dispatch(setVisibleModalCreateOrUpdateCategory(true))
-    setConfigModal({
-      title: "Update Category",
-      type: "UPDATE"
-    })
-  }
-
-  const handleShowConfirmDelete = (category) => {
-    let categorySelect = _.cloneDeep(category)
-    setCategory(categorySelect)
-    dispatch(setVisibleModalDeleteCategory(true))
-  }
-
-  const handleConfirmDeleteCategory = () => {
-    dispatch(handleDeleteCategory(category._id))
+  const handleConfirmDeleteBlog = () => {
+    dispatch(handleUpdateCategoryBlog(param.id, blog._id))
+      .then(() => dispatch(getACategory(param.id)))
   }
 
   const changeCurrentPage = (page) => {
     setDataFilter({ ...dataFilter, page: page });
   }
 
-  const handleSearch = (e) => {
-    setDataFilter({ ...dataFilter, keySearch: e.target.value });
-  }
 
   const onChange = (pagination, filters, sorter) => {
     if (sorter.order && sorter.field) {
@@ -131,36 +119,38 @@ function CategoryDetail() {
     }
   };
 
-  const handleChangeStatus = (value) => {
-    setDataFilter({ ...dataFilter, status: value.toString() });
-  }
+  // const handleChangeStatus = (value) => {
+  //   setDataFilter({ ...dataFilter, status: value.toString() });
+  // }
 
   return (
     <MainLayout>
       <div className={styles.userManagementWrap}>
         <div className={styles.mainWrap}>
           <div className={styles.headerMainWrap}>
-
-            Tên danh mục
+            {categoryDetails.name}
+          </div>
+          <div className={styles.contentMainWrap}>
+            {categoryDetails.description}
           </div>
 
           <TableCustom
-            loading={isLoadingTableCategory}
+            loading={isLoadingDetailCategory}
             columns={columns}
-            dataSource={categorys}
+            dataSource={allBlogs}
             rowKey={'_id'}
-            pagination={paginationListCategory}
+            pagination={paginationListBlog}
             onChangeCurrentPage={changeCurrentPage}
             onChange={onChange}
           />
         </div>
 
         <ModalConfirm
-          isModalOpen={visibleModalDeleteCategory}
-          title={`Delete ${category.name}?`}
-          description={`Are you sure you want to delete ${category.name}? Your action can not be undone.`}
-          onClose={() => dispatch(setVisibleModalDeleteCategory(false))}
-          onConfirm={() => handleConfirmDeleteCategory()}
+          isModalOpen={visibleModalRemoveBlogFromCategory}
+          title={`Remove ${blog.title}?`}
+          description={`Are you sure you want to remove ${blog.title}? Your action can not be undone.`}
+          onClose={() => dispatch(setVisibleModalRemoveBlogFromCategory(false))}
+          onConfirm={() => handleConfirmDeleteBlog()}
         />
       </div>
     </MainLayout>

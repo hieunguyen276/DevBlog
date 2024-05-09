@@ -1,26 +1,83 @@
 @import "src/assets/scss/variables";
 
+
+.customTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  /* Màu chữ */
+  width: 600px;
+  /* Độ rộng của phần tử */
+  /* Các thuộc tính CSS khác nếu cần */
+}
+
+.customContent {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  /* Chỉ hiển thị tối đa 3 dòng */
+  overflow: hidden;
+  /* Ẩn phần nội dung vượt quá 3 dòng */
+  max-height: 5em;
+  /* Chiều cao tối đa tương ứng với 3 dòng */
+  text-overflow: ellipsis;
+  /* Hiển thị dấu ... khi nội dung bị cắt */
+}
+
+.imgWrap {
+  width: 140px;
+  height: auto;
+}
+
+
 .userManagementWrap {
   background: $colorWhite;
   padding: 10px;
   border-radius: 4px;
+
   .mainWrap {
+    background-color: #eeeded;
+
+
     .headerMainWrap {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      font-size: 24px;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 20px 20px;
 
       .title {
         font-size: 20px;
         font-weight: 500;
       }
 
+      // .ant-table-cell {
+      //   width: 600px!important;/* Độ rộng tùy chỉnh cho cột Title */
+      //   /* Các thuộc tính CSS khác tùy ý */
+      // }
+
+
+
       .btnWrap {
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 800;
+        /* Căn giữa theo chiều ngang */
+        align-items: center;
+        /* Căn giữa theo chiều dọc */
+        cursor: pointer;
+        
+
+        .btnWrap img {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+        }
 
         .btnSave {
           min-width: 80px;
@@ -28,6 +85,12 @@
           background-color: $mainColor;
         }
       }
+    }
+
+    .contentMainWrap {
+      padding: 0px 20px 20px 20px;
+      font-size: 18px;
+      text-align: justify;
     }
 
     .boxFilterWrap {
@@ -62,12 +125,14 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
   .imgWrap {
     width: 30px;
     height: 30px;
     overflow: hidden;
     border-radius: 50%;
     margin-right: 10px;
+
     img {
       width: 100%;
       height: 100%;
@@ -82,7 +147,6 @@
   align-items: center;
 
   .btnWrap {
-    display: flex;
 
     img {
       cursor: pointer;
@@ -95,4 +159,5 @@
       }
     }
   }
+
 }

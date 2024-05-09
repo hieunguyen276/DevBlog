@@ -15,7 +15,9 @@ export default defineConfig({
           jsx: 'automatic',
         })
       },
+      
     },
+
     react(),
   ],
 
@@ -26,5 +28,12 @@ export default defineConfig({
         '.js': 'jsx',
       },
     },
+    include: 'ckeditor5-custom-build',
   },
+
+  build: {
+    commonjsOptions: {
+      include: 'ckeditor5-custom-build',
+    }
+  }
 })

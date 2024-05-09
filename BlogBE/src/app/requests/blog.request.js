@@ -34,13 +34,14 @@ export const createItem = Joi.object({
     })
         .instance(FileUpload)
         .allow("")
-        .label("Ảnh nền")
-        .required(),
+        .label("Ảnh nền"),
+    
+
 
     content: Joi.string()
         .trim()
         .max(SUPER_STRING)
-        .required()
+        // .required()
         .label("Nội dung"),
 
     author_id: Joi.string()

@@ -18,20 +18,11 @@ import Filter from './components/Filter';
 import BtnFilter from "../../components/ButtonFilter";
 import { getListAuthor } from '../../api/author';
 import { getListCategory } from '../../api/category';
+import ReactHtmlParser from 'html-react-parser';
 
 function Blogs() {
   // const authUser = useSelector(state => state.auth.authUser);
   const columns = [
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-      render: (text, record) => <div className={styles.titleWrap}>
-        <span>{record.title}</span>
-      </div>,
-      defaultSortOrder: '',
-      sorter: true,
-    },
     {
       title: 'Thumbnail',
       dataIndex: 'thumbnail',
@@ -44,11 +35,21 @@ function Blogs() {
       sorter: true,
     },
     {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      render: (text, record) => <div className={styles.titleWrap}>
+        <span>{record.title}</span>
+      </div>,
+      defaultSortOrder: '',
+      sorter: true,
+    },
+    {
       title: 'Content',
       dataIndex: 'content',
       key: 'content',
       render: (text, record) => (
-        <span className={styles.limitedHeight}>{record.content}</span>
+        <span className={styles.limitedHeight}>{ReactHtmlParser(record.content)}</span>
       ),
       defaultSortOrder: '',
       sorter: true,

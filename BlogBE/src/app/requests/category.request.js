@@ -38,3 +38,4 @@ export const updateItem = Joi.object({
 // export const resetPassword = Joi.object({
 //     new_password: Joi.string().min(6).max(MAX_STRING_SIZE).required().label("Mật khẩu"),
 // });
+

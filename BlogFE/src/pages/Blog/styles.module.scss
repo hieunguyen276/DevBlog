@@ -1,5 +1,17 @@
 @import "src/assets/scss/variables";
 
+.titleWrap {
+  width: 400px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.imgWrap {
+  width: 100px;
+  height: auto;
+}
+
+
 .userManagementWrap {
   background: $colorWhite;
   padding: 10px;
@@ -101,6 +113,7 @@
 }
 
 .limitedHeight {
+  width: 200px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -111,5 +124,6 @@
   /* Chiều cao tối đa tương ứng với 3 dòng */
   text-overflow: ellipsis;
   /* Hiển thị dấu ... khi nội dung bị cắt */
+
 
 }

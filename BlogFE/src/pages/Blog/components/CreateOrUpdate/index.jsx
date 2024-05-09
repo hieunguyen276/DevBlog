@@ -15,6 +15,11 @@ import {
 import { handleCreateBlog, handleUpdateBlog } from "../../../../api/blog";
 import { Button, Select, Upload } from 'antd';
 
+import CustomCKEditor from '../../../../components/UI/CkEditor5';
+
+
+
+
 CreateOrUpdate.prototype = {
   isModalOpen: PropTypes.bool.isRequired,
   configModal: PropTypes.object.isRequired,
@@ -30,6 +35,8 @@ CreateOrUpdate.defaultProps = {
     type: 'CREATE',
   }
 }
+
+
 
 function CreateOrUpdate(props) {
   let { blog, configModal } = props
@@ -48,7 +55,7 @@ function CreateOrUpdate(props) {
   const visibleModalCreateOrUpdateBlog = useSelector(state => state.blog.visibleModalCreateOrUpdateBlog);
   const isLoadingBtnCreateOrUpdateBlog = useSelector(state => state.blog.isLoadingBtnCreateOrUpdateBlog);
   const errorCreateOrUpdateBlog = useSelector(state => state.blog.errorCreateOrUpdateBlog);
-  const [thumbnailFileList, setThumbnailFileList] = useState([]);
+  const [avatarFileList, setAvatarFileList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const categoryUpdate = useSelector(state => state.blog.category);
 
@@ -87,10 +94,23 @@ function CreateOrUpdate(props) {
     })
   }
 
-  const handleThumbnailUpload = (info) => {
+  const handleCKEditorChange = (event, editor) => {
+    setTimeout(() => {
+        if (editor && editor.getData) {
+            const data = editor.getData();
+            setDataCreateOrUpdate(prevData => ({
+                ...prevData,
+                content: data
+            }));
+        }
+    }, 100); // Đợi 100ms trước khi thực hiện getData()
+};
+
+
+  const handleAvatarUpload = (info) => {
     let fileList = [...info.fileList];
     fileList = fileList.slice(-1); // Giới hạn chỉ chọn một tệp tin
-    setThumbnailFileList(fileList);
+    setAvatarFileList(fileList);
 
     // Xử lý khi tệp tin đã được chọn
     fileList = fileList.map(file => {
@@ -101,15 +121,16 @@ function CreateOrUpdate(props) {
     });
 
     // Chuyển đổi tệp tin thành dạng Blob hoặc File và lưu vào state
-    const thumbnailFile = fileList[0]; // Lấy tệp tin đầu tiên nếu có
-    if (thumbnailFile) {
+    // Chuyển đổi tệp tin thành dạng Blob hoặc File và lưu vào state
+    const avatarFile = fileList[0];
+    if (avatarFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const blob = new Blob([reader.result], { type: thumbnailFile.type });
-        thumbnailFile.originFileObj = new File([blob], thumbnailFile.name, { type: thumbnailFile.type });
-        setThumbnailFileList([thumbnailFile]); // Cập nhật thumbnailFileList với tệp tin đã được chuyển đổi
+        const blob = new Blob([reader.result], { type: avatarFile.type });
+        avatarFile.originFileObj = new File([blob], avatarFile.name, { type: avatarFile.type });
+        setAvatarFileList([avatarFile]);
       };
-      reader.readAsArrayBuffer(thumbnailFile.originFileObj);
+      reader.readAsArrayBuffer(avatarFile.originFileObj);
     }
   };
 
@@ -143,7 +164,7 @@ function CreateOrUpdate(props) {
   }
 
   const handleConfirmCreateOrUpdateBlog = () => {
-    console.log(dataCreateOrUpdate)
+    // console.log(dataCreateOrUpdate)
     let dataValidate = dataCreateOrUpdate;
     let data = new FormData();
 
@@ -154,9 +175,10 @@ function CreateOrUpdate(props) {
     data.append('status', 1);
 
     // Thêm thumbnail vào FormData nếu thumbnailFileList không rỗng
-    if (thumbnailFileList.length > 0) {
-      const thumbnailFile = thumbnailFileList[0]; // Chỉ lấy tệp tin đầu tiên nếu có nhiều tệp tin
-      data.append(`thumbnail`, thumbnailFile.originFFileObj);
+    // Thêm avatar vào FormData nếu avatarFileList không rỗng
+    if (avatarFileList.length > 0) {
+      const avatarFile = avatarFileList[0]
+      data.append(`thumbnail`, avatarFile.originFileObj)
     }
 
     // Chuyển đổi mảng các ID danh mục thành một chuỗi và thêm vào FormData
@@ -190,8 +212,8 @@ function CreateOrUpdate(props) {
     }
   };
 
-  const optionAuthor = authors?.map((item) => ({value: item._id, label: item.name}));
-  const optionCategory = categorys?.map((item) => ({value: item._id, label: item.name}));
+  const optionAuthor = authors?.map((item) => ({ value: item._id, label: item.name }));
+  const optionCategory = categorys?.map((item) => ({ value: item._id, label: item.name }));
 
   return (
     <ModalGeneral
@@ -214,57 +236,26 @@ function CreateOrUpdate(props) {
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Content *</div>
-          <InputMASQ
-            type={"text"}
-            placeholder={"Enter content..."}
-            onChange={(e) => handleChangeInput(e, 'content')}
-            onBlur={() => validateBlur('content')}
-            value={dataCreateOrUpdate.content}
-            error={errorCreateOrUpdateBlog.content}
+          <CustomCKEditor
+            // config={{ outputDataToInput: false }}
+            onChange={handleCKEditorChange}
+            data={dataCreateOrUpdate.content}
+            // onBlur={() => validateBlur('content')}
           />
         </div>
 
-
-        {/* <div className={styles.inputWrapper}>
-          <div className={styles.label}>Thumbnail *</div>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e)}
-            onBlur={() => validateBlur('thumbnail')}
-            accept="image/*"
-            // value={dataCreateOrUpdate.thumbnail}
-            error={errorCreateOrUpdateBlog.thumbnail}
-          />
-        </div> */}
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Thumbnail</div>
           <Upload
             beforeUpload={() => false}
-            onChange={handleThumbnailUpload}
-            fileList={thumbnailFileList}
+            onChange={handleAvatarUpload}
+            fileList={avatarFileList}
           >
             <Button>Click to Upload</Button>
           </Upload>
-          {errorCreateOrUpdateBlog.thumbnail && <span className={styles.error}>{errorCreateOrUpdateBlog.thumbnail}</span>}
         </div>
 
-        {/* <div className={styles.inputWrapper}>
-          <div className={styles.label}>Author *</div>
-          <select
-            value={dataCreateOrUpdate.author_id}
-            onChange={(e) => handleChangeInput(e, 'author_id')}
-            onBlur={() => validateBlur('author_id')}
-            className={styles.select}
-          >
-            <option value="">Select an author</option>
-            {authors.map(author => (
-              <option key={author._id} value={author._id}>{author.name}</option>
-            ))}
-          </select>
-        </div> */}
-
-        {/* Antdesign */}
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Author *</div>
@@ -273,29 +264,11 @@ function CreateOrUpdate(props) {
             onChange={handleAuthorChange}
             onBlur={() => validateBlur('author_id')}
             className={styles.select}
-            placeholder="Select an author"
+            placeholder={"Select author..."}
             options={optionAuthor}
           />
-            
         </div>
 
-
-
-        {/* <div>
-          <div className={styles.inputWrapper}>
-            <div className={styles.label}>Category *</div>
-            <select
-              value={selectedCategory} // Sử dụng selectedCategory làm giá trị của select
-              onChange={handleChangeInputOption} // Xử lý sự kiện khi thay đổi lựa chọn
-              className={styles.select}
-            >
-              <option value="">Select category</option>
-              {categorys.map(category => (
-                <option key={category._id} value={category._id}>{category.name}</option>
-              ))}
-            </select>
-          </div>
-        </div> */}
 
         <div>
           <div className={styles.inputWrapper}>
@@ -310,8 +283,7 @@ function CreateOrUpdate(props) {
             />
           </div>
         </div>
-
-
+    
 
         <div className={styles.btnWrap}>
           <ButtonMASQ

@@ -41,5 +41,11 @@ router.delete(
     asyncHandler(categoryController.removeItem)
 );
 
+router.put(
+    "/:id/:blog_id",
+    asyncHandler(categoryMiddleware.checkCategoryId),
+    asyncHandler(categoryController.removeItemBlog)
+);
+
 
 export default router;

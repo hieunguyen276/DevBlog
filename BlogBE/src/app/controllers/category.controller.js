@@ -6,7 +6,8 @@ export async function readRoot(req, res) {
 }
 
 export async function readItem(req, res) {
-    await responseSuccess(res, await categoryService.details(req.params.id));
+    await responseSuccess(res, await categoryService.details(req.category));
+
 }
 
 export async function createItem(req, res) {
@@ -21,5 +22,10 @@ export async function updateItem(req, res) {
 
 export async function removeItem(req, res) {
     await categoryService.remove(req.category);
+    return responseSuccess(res);
+}
+
+export async function removeItemBlog(req, res) {
+    await categoryService.updateCategory(req.params.id, req.params.blog_id);
     return responseSuccess(res);
 }

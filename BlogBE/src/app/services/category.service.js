@@ -52,19 +52,81 @@ export async function filter({q, page, per_page, field, sort_order}) {
 }
 
 export async function details(categoryId) {
-    const category = await Category.findById(categoryId)
-        .populate("blogs" , "_id title content thumbnails");
+    // const category = await Category.findById(categoryId)
+    //     .populate("blogs" , "_id title content thumbnail author_id");
 
-    return category;
+    // return category;
+    const categoryDetails = await Category.aggregate([
+        {
+            $match: { _id: categoryId._id }, // Tìm bài viết cụ thể
+        },
+        {
+            $lookup: {
+                from: "blogs", // Tên bảng chứa danh mục
+                localField: "blogs", // Trường tham chiếu trong bảng Blog
+                foreignField: "_id", // Trường tham chiếu trong bảng Category
+                as: "blogs", // Tên của mảng kết quả
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                description: 1,
+                blogs: {
+                    $map: {
+                        input: "$blogs",
+                        as: "blog",
+                        in: {
+                            _id: "$$blog._id",
+                            title: "$$blog.title",
+                            content: "$$blog.content",
+                            thumbnail: { $concat: [LINK_STATIC_URL, "$$blog.thumbnail"] },
+                            categories: "$$blog.categories",
+                            author_id: "$$blog.author_id",
+                            status: "$$blog.status",
+                            created_at: "$$blog.created_at",
+                            updated_at: "$$blog.updated_at",
+                        },
+                    },
+                },
+            },
+        }
+    ]);
+    
+    return categoryDetails[0];
 }
 
-export async function update(category, {name, description, blogs}) {
+export async function update(category, {name, description}) {
     category.name = name;
     category.description = description;
-    category.blogs = blogs;
     await category.save();
     return category;
 }
+
+
+
+export async function updateCategory(category_id, blog_id) {
+    // Tìm danh mục theo category_id
+    const category = await Category.findById(category_id);
+    // Lọc bỏ blog_id khỏi mảng blogs của danh mục
+    category.blogs = category.blogs.filter(blog => blog.toString() !== blog_id);
+    console.log(category.blogs);
+    // Lưu lại danh mục đã được cập nhật
+
+    const blog = await Blog.findById(blog_id);
+    // Lọc bỏ blog_id khỏi mảng blogs của danh mục
+    blog.categories = blog.categories.filter(category => category.toString() !== category_id);
+    console.log(blog.categories);
+
+    await category.save();
+    await blog.save();
+
+    return {category, blog};
+
+}
+
+
 
 export async function remove(category) {
     await Category.deleteOne({_id: category._id});
