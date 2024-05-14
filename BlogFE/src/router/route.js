@@ -12,6 +12,7 @@ import Authors from '../pages/Author';
 import Category from '../pages/Category';
 import Blogs from '../pages/Blog';
 import CategoryDetail from '../pages/CategoryDetail';
+import BlogCreateOrUpdate from '../pages/BlogCreateOrUpdate';
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,25 @@ const router = createBrowserRouter([
       {request},true, 'LOAD_CATEGORY_DETAIL_PAGE'
     )
   },
+
+  {
+    path: '/blogCreateOrUpdate',
+    element: <BlogCreateOrUpdate/>,
+    loader: ({request}) => rootLoader(
+      {request},true, 'LOAD_CREATE_UPDATE_BLOG_PAGE'
+    )
+  },
+
+  {
+    path: '/blogCreateOrUpdate/:id',
+    element: <BlogCreateOrUpdate/>,
+    loader: ({request}) => rootLoader(
+      {request},true, 'LOAD_CREATE_UPDATE_BLOG_PAGE'
+    )
+  },
+
+
+  
 
   {
     path: '/blogs',

@@ -1,0 +1,60 @@
+@import 'src/assets/scss/variables';
+
+.mainModalWrap {
+    width: 100%;
+
+    .inputWrapper {
+        width: 100%;
+        margin-bottom: 18px;
+
+        .label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            color: $colorBlack;
+            margin-bottom: 4px;
+
+
+        }
+
+        .error {
+            display: block;
+            color: $colorError;
+            font-weight: 500;
+        }
+    }
+
+}
+
+
+
+h1.ck-placeholder {
+    display: none;
+}
+
+// p.ck-placeholder {
+//     line-height: 1.5;
+//     /* Chiều cao mỗi dòng */
+//     height: calc(1.5em * 5);
+//     /* Chiều cao của 20 dòng */
+//     overflow: hidden;
+//     /* Ẩn nội dung vượt quá */
+//     background-color: #f0f0f0;
+//     /* Màu nền để dễ nhận biết */
+//     padding: 20px 10px 10px;
+//     /* Khoảng cách giữa nội dung và viền */
+//     box-sizing: border-box;
+//     /* Bao gồm padding và border trong height */
+// }
+
+// .ck-editor__editable:not(.ck-focused) 
+
+// .ck.ck-editor__main> {
+//     // height: 300px !important;
+//     border: 2px solid;
+//     padding: 20px;
+//     width: 100%;
+//     resize: none;
+//     overflow: auto;
+// }

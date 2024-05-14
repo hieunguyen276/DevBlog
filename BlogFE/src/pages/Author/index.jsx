@@ -19,16 +19,6 @@ import BtnFilter from "../../components/ButtonFilter";
 import { formatDate } from '../../utils/helper';
 
 function Authors () {
-  // const authors = useSelector(state => state.author.authors);
-  // const authAuthor = useSelector(state => state.author.authAuthor);
-
-  // function changeTime(timestamp) {
-  //   const date = new Date(timestamp * 1000); // Nhân 1000 để chuyển đổi timestamp thành mili giây
-  //   const year = date.getFullYear();
-  //   const month = date.getMonth() + 1;
-  //   const day = date.getDate();
-  //   return `${day}/${month}/${year}`;
-  // }
 
   function truncateText(text, maxLength) {
     if (text.length <= maxLength) {
@@ -42,7 +32,8 @@ function Authors () {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <div className={styles.nameWrap}>
+      render: (text, record) =>
+       <div className={styles.nameWrap}>
         <div className={styles.imgWrap}>
           <img src={record.avatar} alt=""/>
         </div>

@@ -7,7 +7,7 @@ export const Blog = createModel("Blog", "blogs", {
     },
     thumbnail: {
         type: String,
-        required: true,
+        // required: true,
     },
     content: {
         type: String,

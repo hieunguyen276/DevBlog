@@ -66,7 +66,7 @@ export const MAX_STRING_SIZE = 255;
 
 export const MAX_NUMBER_SIZE = 999999999999;
 
-export const SUPER_STRING = 10000;
+export const SUPER_STRING = 9999999999;
 
 export const UUID_TRANSLATOR = short();
 

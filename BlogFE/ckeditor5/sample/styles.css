@@ -36,6 +36,7 @@ main .ck-editor[role='application'] .ck.ck-content,
 	background: #fff;
 	border: 1px solid hsl(0, 0%, 70%);
 	width: 100%;
+	
 }
 
 /* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */

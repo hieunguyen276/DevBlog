@@ -7,7 +7,7 @@ import ButtonMASQ from "../../components/UI/Button";
 import IconDeleteTable from "../../assets/images/icon/table/delete_14x14.svg";
 import IconEditTable from "../../assets/images/icon/table/edit_12x12.svg";
 import SwitchMASQ from "../../components/UI/Switch";
-import CreateOrUpdate from "./components/CreateOrUpdate";
+// import CreateOrUpdate from "./components/CreateOrUpdate";
 import ModalConfirm from "../../components/UI/Modal/ModalConfirm";
 import { useDispatch, useSelector } from "react-redux";
 import { getListBlog, handleDeleteBlog } from "../../api/blog";
@@ -19,8 +19,12 @@ import BtnFilter from "../../components/ButtonFilter";
 import { getListAuthor } from '../../api/author';
 import { getListCategory } from '../../api/category';
 import ReactHtmlParser from 'html-react-parser';
+import { useNavigate } from 'react-router-dom';
+import BlogCreateOrUpdate from '../BlogCreateOrUpdate';
 
 function Blogs() {
+
+  const navigate = useNavigate();
   // const authUser = useSelector(state => state.auth.authUser);
   const columns = [
     {
@@ -94,7 +98,7 @@ function Blogs() {
             // authUser.id !== record.id ?
             // authUser.id === record.id ?
             <div className={styles.btnAction}>
-              <div onClick={() => handleEdit(record)} className={styles.btnWrap}>
+              <div onClick={() => navigate(`/blogCreateOrUpdate/${record._id}`)} className={styles.btnWrap}>
                 <img src={IconEditTable} alt="" />
               </div>
               {
@@ -145,10 +149,10 @@ function Blogs() {
   }, [dataFilter, dispatch])
 
   const handleCreate = () => {
-    dispatch(getListAuthor());
-    dispatch(getListCategory())
-    // dispatch(getListBlog())
-    dispatch(setVisibleModalCreateOrUpdateBlog(true))
+    
+    dispatch(getListAuthor())
+      .then(() => dispatch(getListCategory()))
+      // .then(() => dispatch(setVisibleModalCreateOrUpdateBlog(true)))
     setConfigModal({
       title: "Create blog",
       type: "CREATE"
@@ -224,7 +228,8 @@ function Blogs() {
               className={styles.title}>Total records ({paginationListBlog.totalRecord})</span>
             <div className={styles.btnWrap}>
               <ButtonMASQ
-                onClick={() => handleCreate()}
+                // onClick={() => handleCreate()}
+                onClick={() => navigate(`/blogCreateOrUpdate`)} className={styles.btnWrap}
                 style={{
                   minWidth: "80px",
                   margin: "0",
@@ -281,7 +286,7 @@ function Blogs() {
           />
         </div>
 
-        <CreateOrUpdate
+        <BlogCreateOrUpdate
           blog={blog}
           configModal={configModal}
         />

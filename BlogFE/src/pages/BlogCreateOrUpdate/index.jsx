@@ -1,45 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import styles from "./styles.module.scss";
-import InputMASQ from "../../../../components/UI/Input";
-import ButtonMASQ from "../../../../components/UI/Button";
-import _ from "lodash";
-import { isValidate } from "../../../../utils/validate";
-import { handleCheckValidateConfirm } from "../../../../utils/helper";
-import ModalGeneral from "../../../../components/UI/Modal/ModalGeneral";
-import PropTypes from "prop-types";
+import MainLayout from '../../layouts/MainLayout';
+import styles from './styles.module.scss';
+import TableCustom from '../../components/UI/Table'
+import InputMASQ from "../../components/UI/Input";
+import ButtonMASQ from "../../components/UI/Button";
+import SwitchMASQ from "../../components/UI/Switch";
+import ModalConfirm from "../../components/UI/Modal/ModalConfirm";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setErrorCreateOrUpdateBlog,
-  setVisibleModalCreateOrUpdateBlog
-} from "../../../../states/modules/blog";
-import { handleCreateBlog, handleUpdateBlog } from "../../../../api/blog";
+import { getListBlog, handleCreateBlog, handleDeleteBlog, handleUpdateBlog } from "../../api/blog";
+import { setDataCategorySelect, setErrorCreateOrUpdateBlog, setVisibleModalCreateOrUpdateBlog, setVisibleModalDeleteBlog } from "../../states/modules/blog";
+import _ from "lodash";
+import BtnFilter from "../../components/ButtonFilter";
+import { getListAuthor } from '../../api/author';
+import { getListCategory } from '../../api/category';
+import ReactHtmlParser from 'html-react-parser';
+import { useNavigate, useParams } from 'react-router-dom';
+import { isValidate } from '../../utils/validate';
+// import CustomCKEditor from '../../components/UI/CkEditor5';
 import { Button, Select, Upload } from 'antd';
 
-import CustomCKEditor from '../../../../components/UI/CkEditor5';
+import CustomCKEditor from '../../components/UI/CkEditor5';
+import { handleCheckValidateConfirm } from '../../utils/helper';
 
+function BlogCreateOrUpdate() {
+    // let { blog, configModal } = props
+    const param = useParams();
 
+  // const [blog, setBlog] = useState({});
+  const data = useSelector(state => state.blog.blogs);
+  // const [blog, setBlog] = useState(data);
+  // console.log(data);
 
-
-CreateOrUpdate.prototype = {
-  isModalOpen: PropTypes.bool.isRequired,
-  configModal: PropTypes.object.isRequired,
-  onClose: PropTypes.func,
-  onConfirm: PropTypes.func,
-}
-
-CreateOrUpdate.defaultProps = {
-  isModalOpen: false,
-  textBtnConfirm: 'OK',
-  configModal: {
-    title: 'Title',
-    type: 'CREATE',
-  }
-}
-
-
-
-function CreateOrUpdate(props) {
-  let { blog, configModal } = props
+  const findBlogById = (blogsArray, id) => {
+    const foundBlog = blogsArray.find(blog => blog._id === id);
+    return foundBlog || null; 
+  };
+  
+  // Sử dụng hàm để tìm đối tượng blog theo _id
+  const blog = findBlogById(data, param.id);
 
   const dispatch = useDispatch();
 
@@ -58,10 +56,15 @@ function CreateOrUpdate(props) {
   const [avatarFileList, setAvatarFileList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const categoryUpdate = useSelector(state => state.blog.category);
+  const [configModal, setConfigModal] = useState({
+    title: 'Create blog',
+    type: 'CREATE',
+  })
 
   useEffect(() => {
     handleReloadData();
   }, [visibleModalCreateOrUpdateBlog])
+
 
   useEffect(() => {
     dispatch(setErrorCreateOrUpdateBlog({
@@ -207,7 +210,7 @@ function CreateOrUpdate(props) {
       if (configModal.type === 'CREATE') {
         dispatch(handleCreateBlog(data));
       } else {
-        dispatch(handleUpdateBlog(data, blog._id));
+        dispatch(handleUpdateBlog(data, blog.param._id));
       }
     }
   };
@@ -216,15 +219,25 @@ function CreateOrUpdate(props) {
   const optionCategory = categorys?.map((item) => ({ value: item._id, label: item.name }));
 
   return (
-    <ModalGeneral
-      isModalOpen={visibleModalCreateOrUpdateBlog}
-      onClose={() => dispatch(setVisibleModalCreateOrUpdateBlog(false))}
-      configModal={configModal}
-    >
-      <div className={styles.mainModalWrap}>
+    <MainLayout>
+    <div className={styles.mainModalWrap}>
+
+    <div className={styles.inputWrapper}>
+          <div className={styles.label}>Thumbnail</div>
+          <Upload
+            beforeUpload={() => false}
+            onChange={handleAvatarUpload}
+            fileList={avatarFileList}
+            value={dataCreateOrUpdate.thumbnail}
+          >
+            <Button>Click to Upload</Button>
+          </Upload>
+        </div>
+
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Title *</div>
           <InputMASQ
+            className={styles.content}
             type={"text"}
             placeholder={"Enter title..."}
             onChange={(e) => handleChangeInput(e, 'title')}
@@ -234,28 +247,20 @@ function CreateOrUpdate(props) {
           />
         </div>
 
-        <div className={styles.inputWrapper}>
-          <div className={styles.label}>Content *</div>
-          <CustomCKEditor
-            // config={{ outputDataToInput: false }}
-            onChange={handleCKEditorChange}
-            data={dataCreateOrUpdate.content}
-            // onBlur={() => validateBlur('content')}
-          />
+        <div>
+          <div className={styles.inputWrapper}>
+            <div className={styles.label}>Content *</div>
+            <CustomCKEditor
+              onChange={handleCKEditorChange}
+              data={dataCreateOrUpdate.content || ""}
+              // onBlur={() => validateBlur('content')}
+            />
+          </div>
+
         </div>
 
 
-        <div className={styles.inputWrapper}>
-          <div className={styles.label}>Thumbnail</div>
-          <Upload
-            beforeUpload={() => false}
-            onChange={handleAvatarUpload}
-            fileList={avatarFileList}
-          >
-            <Button>Click to Upload</Button>
-          </Upload>
-        </div>
-
+        
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Author *</div>
@@ -299,8 +304,8 @@ function CreateOrUpdate(props) {
           />
         </div>
       </div>
-    </ModalGeneral>
+    </MainLayout>
   );
 }
 
-export default CreateOrUpdate;
+export default BlogCreateOrUpdate;
