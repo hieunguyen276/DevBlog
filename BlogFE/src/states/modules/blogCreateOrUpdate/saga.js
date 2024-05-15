@@ -1,7 +1,7 @@
 import {
   all, fork, put, takeLatest, call
 } from "redux-saga/effects";
-import {setTitlePage} from "../app";
+import {goToPage, setTitlePage} from "../app";
 import {
   getAllRoleForBlog,
   getListBlog
@@ -16,10 +16,7 @@ import {
 } from "./index";
 import {getNotification} from "../../../utils/helper";
 import _ from "lodash";
-import { Avatar } from "antd";
-import category from "../category";
-import { getListAuthor } from "../../../api/author";
-import { getListCategory } from "../../../api/category";
+
 
 function* loadRouteData () {
   yield put(setTitlePage('Blog Management Create Or Update'));
@@ -32,8 +29,9 @@ function* handleActions () {
     getNotification('success', 'Create blog success');
     yield put(setVisibleModalCreateOrUpdateBlog(false));
     yield put(getListBlog());
-    // yield put(getListAuthor());
-    // yield put(getListCategory());
+    yield put(goToPage({
+      path: "/blogs"
+    }))
     
   });
 
@@ -56,6 +54,9 @@ function* handleActions () {
     getNotification('success', 'Update blog success');
     yield put(setVisibleModalCreateOrUpdateBlog(false));
     yield put(getListBlog());
+    yield put(goToPage({
+      path: "/blogs"
+    }))
   });
 
   yield takeLatest(updateBlogFail, function* (action) {

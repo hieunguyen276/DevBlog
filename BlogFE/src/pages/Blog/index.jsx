@@ -287,8 +287,8 @@ function Blogs() {
         </div>
 
         <BlogCreateOrUpdate
-          blog={blog}
-          configModal={configModal}
+          // blog={blog}
+          // configModal={configModal}
         />
 
         <ModalConfirm

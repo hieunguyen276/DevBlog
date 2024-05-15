@@ -15,6 +15,9 @@ import {
 import { handleCreateEmployee, handleUpdateEmployee } from "../../../../api/employee";
 import { Button, Upload } from 'antd';
 
+import { PlusOutlined } from '@ant-design/icons';
+import { Image } from 'antd';
+
 CreateOrUpdate.prototype = {
   isModalOpen: PropTypes.bool.isRequired,
   configModal: PropTypes.object.isRequired,
@@ -81,35 +84,78 @@ function CreateOrUpdate(props) {
     })
   }
 
-//===================================
+  //===================================
 
-const [avatarFileList, setAvatarFileList] = useState([]);
+  const [avatarFileList, setAvatarFileList] = useState([]);
 
-const handleAvatarUpload = (info) => {
-  let fileList = [...info.fileList];
-  fileList = fileList.slice(-1); // Giới hạn chỉ chọn một tệp tin
-  setAvatarFileList(fileList);
+  const handleAvatarUpload = (info) => {
+    let fileList = [...info.fileList];
+    fileList = fileList.slice(-1); // Giới hạn chỉ chọn một tệp tin
+    setAvatarFileList(fileList);
 
-  // Xử lý khi tệp tin đã được chọn
-  fileList = fileList.map(file => {
-    if (file.response) {
-      file.url = file.response.url; // Lưu trữ URL của tệp tin tải lên
+    // Xử lý khi tệp tin đã được chọn
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.url; // Lưu trữ URL của tệp tin tải lên
+      }
+      return file;
+    });
+
+    // Chuyển đổi tệp tin thành dạng Blob hoặc File và lưu vào state
+    const avatarFile = fileList[0]; // Lấy tệp tin đầu tiên nếu có
+    if (avatarFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const blob = new Blob([reader.result], { type: avatarFile.type });
+        avatarFile.originFileObj = new File([blob], avatarFile.name, { type: avatarFile.type });
+        setAvatarFileList([avatarFile]); // Cập nhật avatarFileList với tệp tin đã được chuyển đổi
+      };
+      reader.readAsArrayBuffer(avatarFile.originFileObj);
     }
-    return file;
-  });
+  };
 
-  // Chuyển đổi tệp tin thành dạng Blob hoặc File và lưu vào state
-  const avatarFile = fileList[0]; // Lấy tệp tin đầu tiên nếu có
-  if (avatarFile) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const blob = new Blob([reader.result], { type: avatarFile.type });
-      avatarFile.originFileObj = new File([blob], avatarFile.name, { type: avatarFile.type });
-      setAvatarFileList([avatarFile]); // Cập nhật avatarFileList với tệp tin đã được chuyển đổi
-    };
-    reader.readAsArrayBuffer(avatarFile.originFileObj);
-  }
-};
+
+
+  // Xử lý ảnh mới
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([])
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+
 
 
 
@@ -233,12 +279,26 @@ const handleAvatarUpload = (info) => {
           <div className={styles.label}>Avatar</div>
           <Upload
             beforeUpload={() => false}
-            onChange={handleAvatarUpload}
+            listType="picture-circle"
             fileList={avatarFileList}
+            onPreview={handlePreview}
+            onChange={handleAvatarUpload}
           >
-            <Button>Click to Upload</Button>
+            {avatarFileList.length >= 8 ? null : uploadButton}
           </Upload>
-          {errorCreateOrUpdateEmployee.avatar && <span className={styles.error}>{errorCreateOrUpdateEmployee.avatar}</span>}
+          {previewImage && (
+            <Image
+              wrapperStyle={{
+                display: 'none',
+              }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              }}
+              src={previewImage}
+            />
+          )}
         </div>
 
         {

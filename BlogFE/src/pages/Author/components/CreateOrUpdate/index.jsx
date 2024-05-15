@@ -19,6 +19,9 @@ import DatePickerMSQA from '../../../../components/UI/DatePicker';
 import moment from 'moment';
 import dayjs from 'dayjs';
 
+import { PlusOutlined } from '@ant-design/icons';
+import { Image } from 'antd';
+
 CreateOrUpdate.prototype = {
   isModalOpen: PropTypes.bool.isRequired,
   configModal: PropTypes.object.isRequired,
@@ -111,6 +114,54 @@ function CreateOrUpdate(props) {
       reader.readAsArrayBuffer(avatarFile.originFileObj);
     }
   };
+
+
+
+  // Xử lý ảnh mới
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([])
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+
+
+
+
+
+
 
 
   const handleDateChange = (date, type) => {
@@ -244,18 +295,6 @@ function CreateOrUpdate(props) {
           />
         </div>
 
-        {/* <div className={styles.inputWrapper}>
-          <div className={styles.label}>Birthday *</div>
-          <input
-            type="date"
-            placeholder="Select birthday..."
-            onChange={(e) => handleChangeInput(e, 'birthday')}
-            onBlur={() => validateBlur('birthday')}
-            value={dataCreateOrUpdate.birthday}
-            error={errorCreateOrUpdateAuthor.birthday}
-          />
-        </div> */}
-
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Birthday *</div>
           <DatePickerMSQA
@@ -278,17 +317,6 @@ function CreateOrUpdate(props) {
           />
         </div>
 
-        {/* <div className={styles.inputWrapper}>
-          <div className={styles.label}>Certificate Time *</div>
-          <input
-            type="date"
-            placeholder="Select time..."
-            onChange={(e) => handleChangeInput(e, 'certificateTime')}
-            onBlur={() => validateBlur('certificateTime')}
-            value={dataCreateOrUpdate.certificateTime}
-            error={errorCreateOrUpdateAuthor.certificateTime}
-          />
-        </div> */}
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Certificate Time *</div>
@@ -305,12 +333,27 @@ function CreateOrUpdate(props) {
           <div className={styles.label}>Avatar</div>
           <Upload
             beforeUpload={() => false}
-            onChange={handleAvatarUpload}
+            listType="picture-circle"
             fileList={avatarFileList}
+            onPreview={handlePreview}
+            onChange={handleAvatarUpload}
           >
-            <Button>Click to Upload</Button>
+            {avatarFileList.length >= 8 ? null : uploadButton}
           </Upload>
-          {errorCreateOrUpdateAuthor.avatar && <span className={styles.error}>{errorCreateOrUpdateAuthor.avatar}</span>}
+          {previewImage && (
+            <Image
+              wrapperStyle={{
+                display: 'none',
+              }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              }}
+              src={previewImage}
+            />
+          )}
+        
         </div>
 
         <div className={styles.btnWrap}>

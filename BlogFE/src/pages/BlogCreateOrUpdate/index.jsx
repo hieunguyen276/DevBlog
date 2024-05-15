@@ -21,25 +21,54 @@ import { Button, Select, Upload } from 'antd';
 
 import CustomCKEditor from '../../components/UI/CkEditor5';
 import { handleCheckValidateConfirm } from '../../utils/helper';
+import { goToPageSuccess } from '../../states/modules/app';
+
+import { PlusOutlined } from '@ant-design/icons';
+import { Image } from 'antd';
+
+
+// BlogCreateOrUpdate.prototype = {
+//   // isModalOpen: PropTypes.bool.isRequired,
+//   configModal: PropTypes.object.isRequired,
+//   onClose: PropTypes.func,
+//   onConfirm: PropTypes.func,
+// }
+
+BlogCreateOrUpdate.defaultProps = {
+  isModalOpen: false,
+  textBtnConfirm: 'OK',
+  configModal: {
+    title: 'Title',
+    type: 'CREATE',
+  }
+}
+
 
 function BlogCreateOrUpdate() {
-    // let { blog, configModal } = props
-    const param = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const [blog, setBlog] = useState({});
+  const goToPage = useSelector(state => state.app.goToPage);
+  useEffect(() => {
+    if (goToPage.path && !goToPage.redirected) {
+      dispatch(goToPageSuccess());
+      navigate(goToPage.path);
+    }
+  }, [goToPage, navigate, dispatch]);
+
+  // let { blog, configModal } = props
+  const param = useParams();
+
   const data = useSelector(state => state.blog.blogs);
-  // const [blog, setBlog] = useState(data);
-  // console.log(data);
 
   const findBlogById = (blogsArray, id) => {
     const foundBlog = blogsArray.find(blog => blog._id === id);
-    return foundBlog || null; 
+    return foundBlog || null;
   };
-  
+
   // Sử dụng hàm để tìm đối tượng blog theo _id
   const blog = findBlogById(data, param.id);
 
-  const dispatch = useDispatch();
 
   const [dataCreateOrUpdate, setDataCreateOrUpdate] = useState({
     title: '',
@@ -99,15 +128,15 @@ function BlogCreateOrUpdate() {
 
   const handleCKEditorChange = (event, editor) => {
     setTimeout(() => {
-        if (editor && editor.getData) {
-            const data = editor.getData();
-            setDataCreateOrUpdate(prevData => ({
-                ...prevData,
-                content: data
-            }));
-        }
+      if (editor && editor.getData) {
+        const data = editor.getData();
+        setDataCreateOrUpdate(prevData => ({
+          ...prevData,
+          content: data
+        }));
+      }
     }, 100); // Đợi 100ms trước khi thực hiện getData()
-};
+  };
 
 
   const handleAvatarUpload = (info) => {
@@ -136,6 +165,62 @@ function BlogCreateOrUpdate() {
       reader.readAsArrayBuffer(avatarFile.originFileObj);
     }
   };
+
+
+  // Xử lý ảnh mới
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState([])
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: 'none',
+      }}
+      type="button"
+    >
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleChangeInput = (valueInput, type) => {
     let value = valueInput.target.value;
@@ -207,10 +292,10 @@ function BlogCreateOrUpdate() {
     dispatch(setErrorCreateOrUpdateBlog(validate.dataError));
 
     if (!validate.isError) {
-      if (configModal.type === 'CREATE') {
+      if (!blog) {
         dispatch(handleCreateBlog(data));
       } else {
-        dispatch(handleUpdateBlog(data, blog.param._id));
+        dispatch(handleUpdateBlog(data, blog._id));
       }
     }
   };
@@ -220,18 +305,42 @@ function BlogCreateOrUpdate() {
 
   return (
     <MainLayout>
-    <div className={styles.mainModalWrap}>
+      <div className={styles.mainModalWrap}>
 
-    <div className={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <div className={styles.label}>Thumbnail</div>
-          <Upload
+          {/* <Upload
             beforeUpload={() => false}
             onChange={handleAvatarUpload}
             fileList={avatarFileList}
             value={dataCreateOrUpdate.thumbnail}
           >
             <Button>Click to Upload</Button>
+          </Upload> */}
+
+
+          <Upload
+            beforeUpload={() => false}
+            listType="picture-circle"
+            fileList={avatarFileList}
+            onPreview={handlePreview}
+            onChange={handleAvatarUpload}
+          >
+            {avatarFileList.length >= 8 ? null : uploadButton}
           </Upload>
+          {previewImage && (
+            <Image
+              wrapperStyle={{
+                display: 'none',
+              }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              }}
+              src={previewImage}
+            />
+          )}
         </div>
 
         <div className={styles.inputWrapper}>
@@ -253,14 +362,14 @@ function BlogCreateOrUpdate() {
             <CustomCKEditor
               onChange={handleCKEditorChange}
               data={dataCreateOrUpdate.content || ""}
-              // onBlur={() => validateBlur('content')}
+            // onBlur={() => validateBlur('content')}
             />
           </div>
 
         </div>
 
 
-        
+
 
         <div className={styles.inputWrapper}>
           <div className={styles.label}>Author *</div>
@@ -288,7 +397,7 @@ function BlogCreateOrUpdate() {
             />
           </div>
         </div>
-    
+
 
         <div className={styles.btnWrap}>
           <ButtonMASQ

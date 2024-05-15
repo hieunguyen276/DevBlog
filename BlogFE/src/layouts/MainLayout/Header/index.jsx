@@ -72,7 +72,7 @@ const Header = () => {
             </svg>
           </div>
         </div>
-
+{/* 
         <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentNotification} trigger="click">
           <div className={`${styles.itemHeaderRight} ${styles.notificationAnimationWrap}`}>
             <div className={`${styles.iconWrap}`}>
@@ -91,7 +91,7 @@ const Header = () => {
               </svg>
             </div>
           </div>
-        </Popover>
+        </Popover> */}
 
         <div className={`${styles.itemHeaderRight}`}>
           <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentInfo} trigger="click">
