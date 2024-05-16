@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 // import Logo from '../../../assets/images/logo/zent_logo_dark.png';
 import Logo from '../../../assets/images/logo/Logo.png';
-// import IconLogo from '../../../assets/images/logo/icon_zent.png';
+import IconLogo from '../../../assets/images/logo/icon_blog.jpg';
 import NavItem from "./components/NavItem";
 import {routeMap} from "../../../router/routeMap";
 import {handleCheckRoute} from "../../../utils/helper";

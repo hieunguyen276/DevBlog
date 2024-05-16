@@ -20,12 +20,6 @@ import { formatDate } from '../../utils/helper';
 
 function Authors () {
 
-  function truncateText(text, maxLength) {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength) + '...';
-  }
 
   const columns = [
     {
@@ -56,7 +50,7 @@ function Authors () {
       key: 'bio',
       render: (text, record) =>  <span className={styles.limitedHeight}>{record.bio}</span>,
       defaultSortOrder: '',
-      sorter: true,
+      // sorter: true,
     },
     // {
     //   title: 'Status',
@@ -73,32 +67,32 @@ function Authors () {
       title: 'Birthday',
       dataIndex: 'birthday',
       key: 'birthday',
-      render: (text, record) => <span>{formatDate(record.birthday)}</span>,
+      render: (text, record) => <span>{formatDate(record.birthday * 1000)}</span>,
       defaultSortOrder: '',
-      sorter: true,
+      // sorter: true,
     },
-    {
-      title: 'Certificate Name',
-      dataIndex: 'certificate',
-      key: 'certificate',
-      render: (certificate) => (
-        <span>
-          {certificate && certificate.name ? certificate.name : "Tên chứng chỉ không có sẵn"}
-        </span>
-      ),
-      defaultSortOrder: '',
-      showSorterTooltip: false,
-      sorter: true,
-    },    
-    {
-      title: 'CertificatesDate',
-      dataIndex: 'certificate',
-      key: 'certificate',
-      render: (field) => <span>{field && field.time ? formatDate(field.time * 1000) : "Đang cập nhật"}</span>,
-      defaultSortOrder: '',
-      showSorterTooltip: false,
-      sorter: true,
-    },
+    // {
+    //   title: 'Certificate Name',
+    //   dataIndex: 'certificate',
+    //   key: 'certificate',
+    //   render: (certificate) => (
+    //     <span>
+    //       {certificate && certificate.name ? certificate.name : "Tên chứng chỉ không có sẵn"}
+    //     </span>
+    //   ),
+    //   defaultSortOrder: '',
+    //   showSorterTooltip: false,
+    //   sorter: true,
+    // },    
+    // {
+    //   title: 'CertificatesDate',
+    //   dataIndex: 'certificate',
+    //   key: 'certificate',
+    //   render: (field) => <span>{field && field.time ? formatDate(field.time * 1000) : "Đang cập nhật"}</span>,
+    //   defaultSortOrder: '',
+    //   showSorterTooltip: false,
+    //   sorter: true,
+    // },
     {
       title: 'Actions',
       key: 'action',
@@ -236,7 +230,7 @@ function Authors () {
           <div className={styles.boxFilterWrap}>
             <div className={styles.inputWrap}>
               <InputMASQ
-                placeholder="Search by name, email or phone"
+                placeholder="Search by name, email"
                 value={dataFilter.keySearch}
                 onChange={(e) => handleSearch(e)}
               />
@@ -254,14 +248,14 @@ function Authors () {
                 </defs>
               </svg>
             </div>
-            <BtnFilter
+            {/* <BtnFilter
               content={
                 <Filter
                   statusAuthor={dataFilter.status}
                   onChangeStatus={handleChangeStatus}
                 />
               }
-            />
+            /> */}
           </div>
 
           <TableCustom

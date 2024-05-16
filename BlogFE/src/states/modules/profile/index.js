@@ -15,6 +15,11 @@ const profileSlice = createSlice({
       confirmPassword: ''
     },
     loadingBtnChangePassword: false,
+    visibleModalUpdateAvatar: false,
+    isLoadingBtnUpdateAvatar: false,
+    errorCreateOrUpdateAvatar: {
+      avatar: '',
+    },
   },
   reducers: {
     setErrorInfoUser: (state, action) => ({
@@ -57,6 +62,31 @@ const profileSlice = createSlice({
       ...state,
       loadingBtnChangePassword: false
     }),
+
+    changeAvatar: (state) => ({
+      ...state,
+      loadingBtnChangeAvatar: true
+    }),
+    setDataChangeAvatar: (state, action) => ({
+      ...state,
+      dataChangeAvatar: action.payload
+    }),
+    changeAvatarSuccess: (state) => ({
+      ...state,
+      loadingBtnChangeAvatar: false
+    }),
+    changeAvatarFail: (state) => ({
+      ...state,
+      loadingBtnChangeAvatar: false
+    }),
+    setErrorUpdateAvatar: (state, action) => ({
+      ...state,
+      errorCreateOrUpdateCategory: action.payload
+    }),
+    setVisibleModalUpdateAvatar: (state, action) => ({
+      ...state,
+      visibleModalUpdateAvatar: action.payload
+    }),
   }
 })
 
@@ -66,6 +96,8 @@ export const {
   setDataChangePassword,setErrorInformation,
   updateInfoUser, updateInfoUserSuccess, updateInfoUserFail,
   changePassword, changePasswordSuccess, changePasswordFail,
+  setErrorUpdateAvatar, setVisibleModalUpdateAvatar,
+  changeAvatarFail, changeAvatarSuccess, setDataChangeAvatar, changeAvatar
 } = profileSlice.actions
 
 export default profileSlice.reducer;

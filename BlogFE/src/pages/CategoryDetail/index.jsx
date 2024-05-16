@@ -35,7 +35,7 @@ function CategoryDetail() {
         <div className={styles.imgWrap}>
           <img src={record.thumbnail} alt="" />
         </div>,
-      sorter: true,
+      // sorter: true,
       width: 200,
     },
     {
@@ -43,7 +43,7 @@ function CategoryDetail() {
       dataIndex: 'title',
       key: 'title',
       render: (text, record) => <span className={styles.customTitle}>{record.title}</span>,
-      sorter: true,
+      // sorter: true,
       width: 500,
     },
     {
@@ -51,7 +51,7 @@ function CategoryDetail() {
       dataIndex: 'content',
       key: 'content',
       render: (text, record) => <span className={styles.customContent}>{record.content}</span>,
-      sorter: true,
+      // sorter: true,
     },
     {
       title: 'Actions',

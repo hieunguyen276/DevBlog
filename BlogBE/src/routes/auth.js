@@ -48,4 +48,13 @@ router.patch(
     asyncHandler(authController.changePassword),
 );
 
+router.patch(
+    "/change-avatar",
+    asyncHandler(upload),
+    asyncHandler(verifyToken),
+    asyncHandler(validate(authRequest.changeAvatar)),
+    asyncHandler(authController.changeAvatar),
+);
+
+
 export default router;

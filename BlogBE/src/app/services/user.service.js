@@ -30,7 +30,7 @@ export async function filter({q, page, per_page, field, sort_order}) {
     //  Nếu có, nó tạo một object truy vấn biểu thức chính quy với khớp không phân
     //  biệt chữ hoa chữ thường và gán nó vào biến q. Nếu không, nó gán null cho q.
     const filter = {
-        ...(q && {$or: [{name: q}, {email: q}]}),
+        ...(q && {$or: [{name: q}, {email: q}, {phone: q}]}),
     };
 
     const users = (

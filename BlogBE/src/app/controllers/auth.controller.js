@@ -37,3 +37,8 @@ export async function changePassword(req, res) {
     await resetPassword(req.currentUser, req.body.new_password);
     return responseSuccess(res, null, 201);
 }
+
+export async function changeAvatar(req, res) {
+    await authService.resetAvatar(req.currentUser, req.body.avatar);
+    return responseSuccess(res, null, 201);
+}

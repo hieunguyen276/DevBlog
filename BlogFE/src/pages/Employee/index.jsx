@@ -200,14 +200,14 @@ function Employee () {
                 </defs>
               </svg>
             </div>
-            <BtnFilter
+            {/* <BtnFilter
               content={
                 <Filter
                   statusUser={dataFilter.status}
                   onChangeStatus={handleChangeStatus}
                 />
               }
-            />
+            /> */}
           </div>
 
           <TableCustom

@@ -36,7 +36,7 @@ function Blogs() {
           <img src={record.thumbnail} alt="" />
         </div>,
       defaultSortOrder: '',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: 'Title',
@@ -56,7 +56,7 @@ function Blogs() {
         <span className={styles.limitedHeight}>{ReactHtmlParser(record.content)}</span>
       ),
       defaultSortOrder: '',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: 'Author Name',
@@ -247,7 +247,7 @@ function Blogs() {
           <div className={styles.boxFilterWrap}>
             <div className={styles.inputWrap}>
               <InputMASQ
-                placeholder="Search by title, email or phone"
+                placeholder="Search by title"
                 value={dataFilter.keySearch}
                 onChange={(e) => handleSearch(e)}
               />
@@ -265,14 +265,14 @@ function Blogs() {
                 </defs>
               </svg>
             </div>
-            <BtnFilter
+            {/* <BtnFilter
               content={
                 <Filter
                   statusUser={dataFilter.status}
                   onChangeStatus={handleChangeStatus}
                 />
               }
-            />
+            /> */}
           </div>
 
           <TableCustom
@@ -286,10 +286,10 @@ function Blogs() {
           />
         </div>
 
-        <BlogCreateOrUpdate
+        {/* <BlogCreateOrUpdate
           // blog={blog}
           // configModal={configModal}
-        />
+        /> */}
 
         <ModalConfirm
           isModalOpen={visibleModalDeleteBlog}

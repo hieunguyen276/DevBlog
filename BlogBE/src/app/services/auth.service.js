@@ -102,11 +102,26 @@ export async function updateProfile(currentUser, {name, email, phone, avatar}) {
 }
 
 
-// export async function resetPassword(currentUser, {new_password, confirmPassword}) {
-//     if (new_password === confirmPassword) {
-//         currentUser.password = generatePassword(new_password);
-//         await currentUser.save();
-//     }
+export async function resetPassword(currentUser, {new_password, confirmPassword}) {
+    if (new_password === confirmPassword) {
+        currentUser.password = generatePassword(new_password);
+        await currentUser.save();
+    }
     
-//     return currentUser;
-// }
+    return currentUser;
+}
+
+
+
+
+export async function resetAvatar(currentUser, avatar) {
+    if (avatar) {
+        if (currentUser.avatar) {
+            FileUpload.remove(currentUser.avatar);
+        }
+        avatar = avatar.save("images");
+        currentUser.avatar = avatar;
+    }
+
+    return await currentUser.save();
+}

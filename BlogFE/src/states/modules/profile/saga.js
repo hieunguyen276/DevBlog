@@ -3,15 +3,18 @@ import {
 } from "redux-saga/effects";
 import {setTitlePage} from "../app";
 import {
+  changeAvatarSuccess,
   changePasswordFail,
   changePasswordSuccess, setErrorChangePassword,
   setErrorInfoUser,
+  setVisibleModalUpdateAvatar,
   updateInfoUserFail,
   updateInfoUserSuccess
 } from "./index";
 import {getNotification} from "../../../utils/helper";
 import {getMe} from "../../../api/auth";
 import _ from "lodash";
+import { useDispatch } from "react-redux";
 
 function* loadRouteData () {
   yield put(setTitlePage('Profile'));
@@ -28,8 +31,16 @@ function* loadRouteData () {
 }
 
 function* handleActions () {
+
   yield takeLatest(updateInfoUserSuccess, function* () {
     getNotification('success', 'Update info user success');
+    yield put(getMe());
+
+  });
+
+  yield takeLatest(changeAvatarSuccess, function* () {
+    getNotification('success', 'Change avatar success');
+    yield put(setVisibleModalUpdateAvatar(false))
     yield put(getMe());
   });
 

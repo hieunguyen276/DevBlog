@@ -141,3 +141,16 @@ export const changePassword = Joi.object({
         .label("Mật khẩu mới")
         .invalid(Joi.ref("password")),
 });
+
+export const changeAvatar = Joi.object({
+    avatar: Joi.object({
+        originalname: Joi.string().trim().required().label("Tên ảnh"),
+        mimetype: Joi.valid("image/jpeg", "image/png", "image/svg+xml", "image/webp")
+            .required()
+            .label("Định dạng ảnh"),
+        buffer: Joi.binary().required().label("Ảnh đại diện"),
+    })
+        .instance(FileUpload)
+        .allow("") //.allow("") được sử dụng trong Joi để chỉ định rằng một chuỗi rỗng là một giá trị hợp lệ cho dữ liệu
+        .label("Ảnh đại diện")
+});

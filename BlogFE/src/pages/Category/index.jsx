@@ -45,7 +45,7 @@ function Category() {
       key: 'description',
       render: (text, record) => <span>{record.description}</span>,
       defaultSortOrder: '',
-      sorter: true,
+      // sorter: true,
     },
     // {
     //   title: 'Blog',
@@ -239,7 +239,7 @@ function Category() {
           <div className={styles.boxFilterWrap}>
             <div className={styles.inputWrap}>
               <InputMASQ
-                placeholder="Search by name, email or phone"
+                placeholder="Search by name"
                 value={dataFilter.keySearch}
                 onChange={(e) => handleSearch(e)}
               />
@@ -257,14 +257,14 @@ function Category() {
                 </defs>
               </svg>
             </div>
-            <BtnFilter
+            {/* <BtnFilter
               content={
                 <Filter
                   statusUser={dataFilter.status}
                   onChangeStatus={handleChangeStatus}
                 />
               }
-            />
+            /> */}
           </div>
 
           <TableCustom
